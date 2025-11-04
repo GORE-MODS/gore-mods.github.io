@@ -3,65 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GORE-MODS</title>
+    <title>GORE-MODS | Brutal Mods for Gorilla Tag</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="G.Troll.png">
 </head>
 <body>
+
+    <!-- HEADER -->
     <header>
         <div class="container">
             <h1>GORE-MODS</h1>
             <nav>
                 <a href="#about">About</a>
                 <a href="#mods">Mods</a>
+                <a href="#stats">Stats</a>
             </nav>
         </div>
     </header>
 
+    <!-- HERO SECTION -->
     <section id="hero">
         <div class="container">
             <h2>Brutal Mods for Brutal Games</h2>
-            <p>by <strong>GORE-MODS</strong>.</p>
+            <p>High-octane, gore-soaked mods by <strong>GORE-MODS</strong>.</p>
             <a href="https://github.com/GORE-MODS" target="_blank" class="btn">GitHub Profile</a>
         </div>
     </section>
 
+    <!-- ABOUT SECTION -->
     <section id="about" class="section">
         <div class="container">
             <h2>About Me</h2>
             <p>
-                Hey! I'm <strong>GORE</strong>, a modder, I make mods for games like gorilla tag!
+                Yo! I'm <strong>GORE</strong> — a chaotic modder obsessed with pushing Gorilla Tag to the absolute limit. 
+                I build open-source, high-performance mods that add insane gameplay, visual effects, and pure mayhem.
+            </p>
+            <p>
+                From mod menus to custom cosmetics — if it's wild, loud, and breaks the rules of physics... I made it.
             </p>
         </div>
     </section>
 
+    <!-- MODS SECTION -->
     <section id="mods" class="section bg-dark">
         <div class="container">
             <h2>My Mods</h2>
             <div class="grid">
                 <div class="card">
                     <h3>GORE.Win</h3>
-                    <p>Simple Gorilla Tag Mod Menu</p>
+                    <p>lightweight mod menu for Gorilla Tag.</p>
                     <a href="https://github.com/GORE-MODS/GORE.Win" target="_blank" class="btn-small">View Repo</a>
                 </div>
+                <!-- I will add more cards -->
+                <!--
+                <div class="card">
+                    <h3>Another Mod</h3>
+                    <p>Description here.</p>
+                    <a href="LINK" target="_blank" class="btn-small">View Repo</a>
+                </div>
+                -->
+            </div>
         </div>
     </section>
 
-                <div id="github-stats"></div>
-            <a href="https://github.com/anuraghazra/github-readme-stats">
-    <img height=170 align="center" src="https://github-readme-stats.vercel.app/api/top-langs?username=GORE-MODS&layout=compact&langs_count=8" />
-  </a>
-  <a href="https://github.com/anuraghazra/github-readme-stats">
-    <img height=180 align="center" src="https://github-readme-stats.vercel.app/api?username=GORE-MODS" />
-  </a>
-  </p>
+    <!-- GITHUB STATS SECTION -->
+    <section id="stats" class="section">
+        <div class="container">
+            <h2>GitHub Stats</h2>
+            <div class="grid" style="gap: 1.5rem; justify-items: center;">
+                <a href="https://github.com/anuraghazra/github-readme-stats" target="_blank">
+                    <img 
+                        src="https://github-readme-stats.vercel.app/api/top-langs?username=GORE-MODS&layout=compact&langs_count=8&theme=dracula&hide_border=true&bg_color=1a1a1a&title_color=ff5555&text_color=eee" 
+                        alt="Top Languages" 
+                        style="border-radius: var(--border-radius);"
+                    />
+                </a>
+                <a href="https://github.com/anuraghazra/github-readme-stats" target="_blank">
+                    <img 
+                        src="https://github-readme-stats.vercel.app/api?username=GORE-MODS&show_icons=true&theme=dracula&hide_border=true&bg_color=1a1a1a&title_color=ff5555&text_color=eee&icon_color=ff5555" 
+                        alt="GitHub Stats" 
+                        style="border-radius: var(--border-radius);"
+                    />
+                </a>
+            </div>
+        </div>
+    </section>
 
+    <!-- FOOTER -->
     <footer>
         <div class="container">
-            <p>© 2025 GORE-MODS — <a href="https://github.com/GORE-MODS" target="_blank">GitHub</a></p>
+            <p>© 2025 <strong>GORE-MODS</strong> — <a href="https://github.com/GORE-MODS" target="_blank">GitHub</a></p>
         </div>
     </footer>
 
+    <!-- Optional: Fetch live stats via JS (fallback if images fail) -->
     <script src="script.js"></script>
 </body>
 </html>
