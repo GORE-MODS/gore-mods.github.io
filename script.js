@@ -1,5 +1,5 @@
-// Sample data (saved to localStorage)
-let profile = JSON.parse(localStorage.getItem('profile')) || {
+/* ==== Data (persisted in localStorage) ==== */
+let profile = JSON.parse(localStorage.getItem('myBioLink')) || {
     name: 'Your Name',
     bio: 'Add a short bio here.',
     pic: 'https://via.placeholder.com/150',
@@ -9,97 +9,98 @@ let profile = JSON.parse(localStorage.getItem('profile')) || {
     ]
 };
 
-let editMode = false;
+/* ==== Dark-mode handling ==== */
+const themeToggle = document.getElementById('theme-toggle');
+const body = document.body;
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme) body.classList.toggle('dark', savedTheme === 'dark');
+else body.classList.add('light');
 
-// Render the page
+themeToggle.textContent = body.classList.contains('dark') ? 'Light Mode' : 'Dark Mode';
+themeToggle.addEventListener('click', () => {
+    const isDark = body.classList.toggle('dark');
+    themeToggle.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+});
+
+/* ==== Rendering ==== */
 function render() {
     document.getElementById('name').textContent = profile.name;
     document.getElementById('bio').textContent = profile.bio;
-    document.getElementById('profile-pic').src = profile.pic;
-    
+    document.getElementById('profile-pic').src = profile.pic || 'https://via.placeholder.com/150';
+
     const linksEl = document.getElementById('links');
     linksEl.innerHTML = '';
-    profile.links.forEach(link => {
-        const btn = document.createElement('a');
-        btn.href = link.url;
-        btn.textContent = link.label;
-        btn.className = 'link-btn';
-        btn.target = '_blank';
-        linksEl.appendChild(btn);
+    profile.links.forEach(l => {
+        const a = Object.assign(document.createElement('a'), {
+            href: l.url,
+            textContent: l.label,
+            className: 'link-btn',
+            target: '_blank',
+            rel: 'noopener'
+        });
+        linksEl.appendChild(a);
     });
 }
 
-// Toggle edit modal
-document.getElementById('edit-btn').addEventListener('click', () => {
-    editMode = true;
-    document.getElementById('edit-modal').style.display = 'block';
+/* ==== Edit modal ==== */
+const modal = document.getElementById('edit-modal');
+document.getElementById('edit-btn').onclick = openEdit;
+function openEdit() {
+    modal.style.display = 'flex';
     document.getElementById('edit-name').value = profile.name;
     document.getElementById('edit-bio').value = profile.bio;
     document.getElementById('edit-pic').value = profile.pic;
-    
-    // Render link inputs
-    const inputsEl = document.getElementById('link-inputs');
-    inputsEl.innerHTML = '';
-    profile.links.forEach((link, index) => {
-        const div = document.createElement('div');
-        div.innerHTML = `
-            <label>Link ${index + 1} Label: <input type="text" value="${link.label}" data-index="${index}" class="link-label"></label>
-            <label>URL: <input type="url" value="${link.url}" data-index="${index}" class="link-url"></label>
-            <button type="button" onclick="removeLink(${index})">Remove</button>
-        `;
-        inputsEl.appendChild(div);
-    });
-});
 
-// Add new link input
-document.getElementById('add-link').addEventListener('click', () => {
-    const index = profile.links.length;
-    const div = document.createElement('div');
-    div.innerHTML = `
-        <label>Link ${index + 1} Label: <input type="text" placeholder="e.g., Twitter" data-index="${index}" class="link-label"></label>
-        <label>URL: <input type="url" placeholder="https://..." data-index="${index}" class="link-url"></label>
-        <button type="button" onclick="removeLink(${index})">Remove</button>
-    `;
-    document.getElementById('link-inputs').appendChild(div);
-    profile.links.push({ label: '', url: '' }); // Placeholder
-});
-
-// Remove link
-function removeLink(index) {
-    profile.links.splice(index, 1);
-    // Re-render inputs (simplified; in production, re-loop)
-    // For brevity, reload the add listener or re-call render inputs
+    const container = document.getElementById('link-inputs');
+    container.innerHTML = '';
+    profile.links.forEach((lnk, i) => addLinkRow(container, lnk, i));
 }
+function addLinkRow(parent, data = {label:'',url:''}, idx = profile.links.length) {
+    const div = document.createElement('div');
+    div.className = 'link-row';
+    div.innerHTML = `
+        <input type="text" placeholder="Label" value="${data.label}" data-idx="${idx}" class="link-label">
+        <input type="url" placeholder="https://..." value="${data.url}" data-idx="${idx}" class="link-url">
+        <button type="button" class="remove-link" data-idx="${idx}">Remove</button>
+    `;
+    parent.appendChild(div);
+}
+document.getElementById('add-link').onclick = () => {
+    const idx = profile.links.length;
+    profile.links.push({label:'',url:''});
+    addLinkRow(document.getElementById('link-inputs'), {}, idx);
+};
 
-// Save form
-document.getElementById('edit-form').addEventListener('submit', (e) => {
+/* ==== Save ==== */
+document.getElementById('edit-form').onsubmit = e => {
     e.preventDefault();
-    profile.name = document.getElementById('edit-name').value;
-    profile.bio = document.getElementById('edit-bio').value;
-    profile.pic = document.getElementById('edit-pic').value;
-    
-    // Update links
+    profile.name = document.getElementById('edit-name').value.trim();
+    profile.bio = document.getElementById('edit-bio').value.trim();
+    profile.pic = document.getElementById('edit-pic').value.trim();
+
     const labels = document.querySelectorAll('.link-label');
-    const urls = document.querySelectorAll('.link-url');
+    const urls   = document.querySelectorAll('.link-url');
     profile.links = [];
-    labels.forEach((label, i) => {
-        const url = urls[i];
-        if (label.value && url.value) {
-            profile.links.push({ label: label.value, url: url.value });
-        }
+    labels.forEach((lbl,i) => {
+        const u = urls[i];
+        if (lbl.value && u.value) profile.links.push({label:lbl.value, url:u.value});
     });
-    
-    localStorage.setItem('profile', JSON.stringify(profile));
+
+    localStorage.setItem('myBioLink', JSON.stringify(profile));
+    modal.style.display = 'none';
     render();
-    document.getElementById('edit-modal').style.display = 'none';
-    editMode = false;
+};
+document.getElementById('cancel-edit').onclick = () => modal.style.display = 'none';
+
+/* ==== Remove link row ==== */
+document.addEventListener('click', ev => {
+    if (ev.target.classList.contains('remove-link')) {
+        const idx = +ev.target.dataset.idx;
+        profile.links.splice(idx,1);
+        openEdit(); // re-render rows
+    }
 });
 
-// Cancel
-document.getElementById('cancel-edit').addEventListener('click', () => {
-    document.getElementById('edit-modal').style.display = 'none';
-    editMode = false;
-});
-
-// Initial render
+/* ==== Init ==== */
 render();
