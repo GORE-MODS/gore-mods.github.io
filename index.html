@@ -3,49 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GORE</title>
+    <title>My Bio Link</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Google Font (optional but nice) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="light">
     <div class="container">
-        <header>
-            <img id="profile-pic" src="https://via.placeholder.com/150" alt="Profile" class="profile-pic">
+        <!-- Dark-mode toggle -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">Dark Mode</button>
+
+        <header class="profile">
+            <div class="avatar-wrapper">
+                <img id="profile-pic" src="https://via.placeholder.com/150" alt="Profile" class="avatar">
+            </div>
             <h1 id="name">Your Name</h1>
             <p id="bio">Add a short bio here.</p>
         </header>
-        
-        <section id="links" class="links">
-            <!-- Links will be added by JS -->
-        </section>
-        
-        <footer>
+
+        <section id="links" class="links"></section>
+
+        <footer class="footer">
             <button id="edit-btn" class="edit-btn">Edit Profile</button>
         </footer>
     </div>
-    
-    <!-- Edit Modal (Hidden by default) -->
+
+    <!-- Edit Modal -->
     <div id="edit-modal" class="modal">
         <div class="modal-content">
-            <h2>Edit Your Profile</h2>
+            <h2>Edit Profile</h2>
             <form id="edit-form">
-                <label>Name: <input type="text" id="edit-name" value="Your Name"></label>
-                <label>Bio: <textarea id="edit-bio">Add a short bio here.</textarea></label>
-                <label>Profile Pic URL: <input type="url" id="edit-pic" value="https://via.placeholder.com/150"></label>
-                
-                <h3>Add/Edit Links</h3>
-                <div id="link-inputs">
-                    <!-- Dynamic inputs for links -->
-                </div>
-                <button type="button" id="add-link">Add Link</button>
-                
-                <div class="form-actions">
-                    <button type="submit">Save</button>
-                    <button type="button" id="cancel-edit">Cancel</button>
+                <label>Name <input type="text" id="edit-name"></label>
+                <label>Bio <textarea id="edit-bio" rows="3"></textarea></label>
+                <label>Profile Pic URL <input type="url" id="edit-pic"></label>
+
+                <h3>Links</h3>
+                <div id="link-inputs"></div>
+                <button type="button" id="add-link" class="add-link-btn">+ Add Link</button>
+
+                <div class="modal-actions">
+                    <button type="submit" class="save-btn">Save</button>
+                    <button type="button" id="cancel-edit" class="cancel-btn">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
-    
+
     <script src="script.js"></script>
 </body>
 </html>
