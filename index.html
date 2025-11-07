@@ -3,94 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GORE-MODS | For mods</title>
+    <title>GORE</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="G.Troll.png">
 </head>
 <body>
-
-    <!-- HEADER -->
-    <header>
-        <div class="container">
-            <h1>GORE-MODS</h1>
-            <nav>
-                <a href="#about">About</a>
-                <a href="#mods">Mods</a>
-                <a href="#stats">Stats</a>
-            </nav>
-        </div>
-    </header>
-
-    <!-- HERO SECTION -->
-    <section id="hero">
-        <div class="container">
-            <h2>Brutal Mods for Brutal Games</h2>
-            <p>Mods by <strong>GORE-MODS</strong>.</p>
-            <a href="https://github.com/GORE-MODS" target="_blank" class="btn">GitHub Profile</a>
-        </div>
-    </section>
-
-    <!-- ABOUT SECTION -->
-    <section id="about" class="section">
-        <div class="container">
-            <h2>About Me</h2>
-            <p>
-                Yo! I'm <strong>GORE</strong> — a modder that makes mods for games like Gorilla Tag. 
-                Like mod menus.
-            </p>
-        </div>
-    </section>
-
-    <!-- MODS SECTION -->
-    <section id="mods" class="section bg-dark">
-        <div class="container">
-            <h2>My Mods</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>GORE.Win</h3>
-                    <p>lightweight mod menu for Gorilla Tag.</p>
-                    <a href="https://github.com/GORE-MODS/GORE.Win" target="_blank" class="btn-small">View Repo</a>
+    <div class="container">
+        <header>
+            <img id="profile-pic" src="https://via.placeholder.com/150" alt="Profile" class="profile-pic">
+            <h1 id="name">Your Name</h1>
+            <p id="bio">Add a short bio here.</p>
+        </header>
+        
+        <section id="links" class="links">
+            <!-- Links will be added by JS -->
+        </section>
+        
+        <footer>
+            <button id="edit-btn" class="edit-btn">Edit Profile</button>
+        </footer>
+    </div>
+    
+    <!-- Edit Modal (Hidden by default) -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <h2>Edit Your Profile</h2>
+            <form id="edit-form">
+                <label>Name: <input type="text" id="edit-name" value="Your Name"></label>
+                <label>Bio: <textarea id="edit-bio">Add a short bio here.</textarea></label>
+                <label>Profile Pic URL: <input type="url" id="edit-pic" value="https://via.placeholder.com/150"></label>
+                
+                <h3>Add/Edit Links</h3>
+                <div id="link-inputs">
+                    <!-- Dynamic inputs for links -->
                 </div>
-                <!-- I will add more cards -->
-                <!--
-                <div class="card">
-                    <h3>Another Mod</h3>
-                    <p>Description here.</p>
-                    <a href="LINK" target="_blank" class="btn-small">View Repo</a>
+                <button type="button" id="add-link">Add Link</button>
+                
+                <div class="form-actions">
+                    <button type="submit">Save</button>
+                    <button type="button" id="cancel-edit">Cancel</button>
                 </div>
-                -->
-            </div>
+            </form>
         </div>
-    </section>
-
-    <!-- GITHUB STATS SECTION -->
-    <section id="stats" class="section">
-        <div class="container">
-            <h2>GitHub Stats</h2>
-            <div class="grid" style="gap: 1.5rem; justify-items: center;">
-                <a href="https://github.com/anuraghazra/github-readme-stats" target="_blank">
-                    <img 
-                        src="https://github-readme-stats.vercel.app/api/top-langs?username=GORE-MODS&layout=compact&langs_count=8&theme=dracula&hide_border=true&bg_color=1a1a1a&title_color=ff5555&text_color=eee" 
-                        alt="Top Languages" 
-                        style="border-radius: var(--border-radius);"
-                    />
-                </a>
-                <a href="https://github.com/anuraghazra/github-readme-stats" target="_blank">
-                    <img 
-                        src="https://github-readme-stats.vercel.app/api?username=GORE-MODS&show_icons=true&theme=dracula&hide_border=true&bg_color=1a1a1a&title_color=ff5555&text_color=eee&icon_color=ff5555" 
-                        alt="GitHub Stats" 
-                        style="border-radius: var(--border-radius);"
-                    />
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer>
-        <div class="container">
-            <p>© 2025 <strong>GORE-MODS</strong> — <a href="https://github.com/GORE-MODS" target="_blank">GitHub</a></p>
-        </div>
-    </footer>
+    </div>
+    
+    <script src="script.js"></script>
 </body>
 </html>
