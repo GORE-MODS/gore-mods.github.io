@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>gore-mods</title>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Premium Bio-Link Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
@@ -39,8 +37,7 @@
             justify-content: center;
             align-items: center;
         }
-
-        /* Ambient Background Grid */
+        
         #canvas-bg {
             position: absolute;
             top: 0;
@@ -61,8 +58,7 @@
             z-index: 2;
             pointer-events: none;
         }
-
-        /* Sleek Gun.lol Cursor */
+        
         .custom-cursor {
             width: 24px;
             height: 24px;
@@ -85,8 +81,7 @@
             pointer-events: none;
             z-index: 9999;
         }
-
-        /* Blur-to-Focus Overlay Gate */
+        
         #enter-overlay {
             position: fixed;
             top: 0;
@@ -116,8 +111,7 @@
             text-shadow: 0 0 20px var(--accent-glow);
             animation: pulse-glow 2.5s infinite ease-in-out;
         }
-
-        /* Upgraded Profile Container */
+        
         #main-card {
             position: relative;
             z-index: 10;
@@ -140,8 +134,7 @@
             opacity: 1;
             transform: scale(1) translateY(0);
         }
-
-        /* Profile Details Layout */
+        
         .avatar-container {
             position: relative;
             width: 120px;
@@ -184,8 +177,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
-        /* Live Typewriter Styling */
+        
         .typewriter-container {
             height: 20px;
             margin-bottom: 18px;
@@ -222,8 +214,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-
-        /* High Fidelity Button List */
+        
         .links-container {
             display: flex;
             flex-direction: column;
@@ -331,8 +322,7 @@
         .audio-controls button:hover {
             color: var(--accent-red);
         }
-
-        /* Keyframes Animations */
+        
         @keyframes pulse-glow {
             0%, 100% { opacity: 0.5; }
             50% { opacity: 1; text-shadow: 0 0 30px var(--accent-red); }
@@ -346,8 +336,7 @@
             from, to { border-color: transparent }
             50% { border-color: var(--accent-red); }
         }
-
-        /* Touch Device Adaptations */
+        
         @media (max-width: 768px) {
             .custom-cursor, .custom-cursor-dot {
                 display: none;
@@ -359,24 +348,18 @@
     </style>
 </head>
 <body>
-
-    <!-- Target Custom Cursor Construct -->
+    
     <div class="custom-cursor" id="cursor"></div>
     <div class="custom-cursor-dot" id="cursor-dot"></div>
-
-    <!-- Active Particle Fabric Matrix -->
     <canvas id="canvas-bg"></canvas>
     <div class="ambient-overlay"></div>
-
-    <!-- Click-Through Gate -->
+    
     <div id="enter-overlay">
         <div class="enter-text">click to explore</div>
     </div>
-
-    <!-- Main Profile Card Framework -->
+    
     <div id="main-card">
         <div class="avatar-container">
-            <!-- Automatically references your direct GitHub organization avatar asset -->
             <img src="https://github.com/GORE-MODS.png" alt="GORE-MODS Avatar" class="avatar">
             <div class="verified-badge" title="Verified Creator">
                 <i class="fas fa-check"></i>
@@ -385,33 +368,20 @@
 
         <h1 class="username">GORE-MODS</h1>
         
-        <!-- Live Typewriter Location -->
         <div class="typewriter-container">
             <div class="typewriter-text" id="typewriter"></div>
         </div>
         
         <div class="badge-row">
             <span class="badge"><i class="fas fa-code"></i> Developer</span>
-            <span class="badge"><i class="fas fa-bolt"></i> Next-Gen</span>
         </div>
-
-        <!-- Directory Link Nodes -->
+        
         <div class="links-container">
             <a href="https://github.com/GORE-MODS" target="_blank" class="link-item">
                 <span><i class="fab fa-github"></i> Core Repositories</span>
                 <i class="fas fa-chevron-right"></i>
             </a>
-            <a href="https://discord.gg/" target="_blank" class="link-item">
-                <span><i class="fab fa-discord"></i> Discord Hub</span>
-                <i class="fas fa-chevron-right"></i>
-            </a>
-            <a href="https://youtube.com/" target="_blank" class="link-item">
-                <span><i class="fab fa-youtube"></i> Video Showcases</span>
-                <i class="fas fa-chevron-right"></i>
-            </a>
-        </div>
-
-        <!-- Integrated Audio System Deck -->
+            
         <div class="audio-player">
             <div class="track-info">
                 <i class="fas fa-compact-disc" id="disc-icon"></i>
@@ -425,8 +395,7 @@
             </div>
         </div>
     </div>
-
-    <!-- Audio Streaming Target Asset -->
+        
     <audio id="bg-audio" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
     <script>
@@ -439,9 +408,7 @@
         const cursorDot = document.getElementById('cursor-dot');
         const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
-
-        // Dynamic Sub-Header Typewriter Module
-        const phrases = ["Building game alterations.", "Developing slick interfaces.", "Unrestricted logic.", "Built different."];
+        const phrases = ["Brainfuck is a very good language.", "Yes github.", "Yes make mod :3."];
         let phraseIdx = 0;
         let charIdx = 0;
         let isDeleting = false;
@@ -460,26 +427,24 @@
             let typeSpeed = isDeleting ? 35 : 75;
 
             if (!isDeleting && charIdx === currentPhrase.length) {
-                typeSpeed = 1800; // Hold full phrase view
+                typeSpeed = 1800;
                 isDeleting = true;
             } else if (isDeleting && charIdx === 0) {
                 isDeleting = false;
                 phraseIdx = (phraseIdx + 1) % phrases.length;
-                typeSpeed = 400; // Rest before typing next phrase
+                typeSpeed = 400;
             }
 
             setTimeout(runTypewriter, typeSpeed);
         }
-
-        // Resizing Canvas Render Workspace
+        
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
-
-        // Advanced Interactive Dust Generation
+        
         const particles = [];
         class DustParticle {
             constructor() {
@@ -522,8 +487,7 @@
             requestAnimationFrame(drawBackgroundLoop);
         }
         drawBackgroundLoop();
-
-        // Custom Adaptive Cursor Loop Mechanics
+        
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
@@ -545,22 +509,18 @@
                 cursor.style.backgroundColor = 'transparent';
             });
         });
-
-        // Entrance Gateway Trigger Logic
+        
         overlay.addEventListener('click', () => {
             overlay.classList.add('fade-out');
             card.classList.add('reveal');
             
-            // Execute Audio System Handshake
             audio.play().catch(() => console.log("Media engine requires manual user interface click event."));
             playBtn.innerHTML = '<i class="fas fa-pause"></i>';
             discIcon.style.animationPlayState = 'running';
             
-            // Fire Text Generator Loop
             setTimeout(runTypewriter, 400);
         });
-
-        // Native Deck Controls 
+        
         playBtn.addEventListener('click', () => {
             if (audio.paused) {
                 audio.play();
