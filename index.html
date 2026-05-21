@@ -1,1 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gore-mods</title>
+    <!-- FontAwesome for sleek social icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts for bio-link style typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Syne:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #050505;
+            --card-color: rgba(10, 10, 10, 0.6);
+            --accent-color: #ff3333; /* Aggressive red to match "gore-mods" */
+            --text-color: #ffffff;
+            --text-muted: #888888;
+            --border-color: rgba(255, 51, 51, 0.2);
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Background Effects */
+        #canvas-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--accent-color);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+
+        .custom-cursor-dot {
+            width: 4px;
+            height: 4px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Click to Enter Overlay */
+        #enter-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+
+        #enter-overlay.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .enter-text {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--text-color);
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        /* Main Bio Card */
+        #main-card {
+            position: relative;
+            z-index: 10;
+            width: 450px;
+            max-width: 90%;
+            background: var(--card-color);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px 30px;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #main-card.reveal {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        /* Profile Elements */
+        .avatar-container {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 20px;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 20px rgba(255, 51, 51, 0.4);
+        }
+
+        .verified-badge {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: var(--accent-color);
+            color: #fff;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.75rem;
+            box-shadow: 0 0 10px rgba(255, 51, 51, 0.6);
+        }
+
+        .username {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .badge-row {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .description {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        /* Links/Buttons Configuration */
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 14px 20px;
+            border-radius: 10px;
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
+        }
+
+        .link-item:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 51, 51, 0.05);
+            border-color: var(--accent-color);
+        }
+
+        .link-item i {
+            font-size: 1.2rem;
+            width: 25px;
+            text-align: left;
+        }
+
+        .link-item .fa-chevron-right {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        /* Audio Player Styling */
+        .audio-player {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-color);
+            padding: 12px 20px;
+            border-radius: 30px;
+        }
+
+        .track-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+
+        .track-info i {
+            color: var(--accent-color);
+            animation: spin 4s linear infinite;
+        }
+
+        .track-name {
+            font-weight: 700;
+            display: block;
+        }
+
+        .track-artist {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        .audio-controls button {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: color 0.2s;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; filter: blur(1px); }
+            50% { opacity: 1; filter: blur(0px); }
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive configuration */
+        @media (max-width: 768px) {
+            .custom-cursor, .custom-cursor-dot {
+                display: none;
+            }
+            body {
+                cursor: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Custom Cursor Nodes -->
+    <div class="custom-cursor" id="cursor"></div>
+    <div class="custom-cursor-dot" id="cursor-dot"></div>
+
+    <!-- Interactive Background Canvas -->
+    <canvas id="canvas-bg"></canvas>
+    <div class="scanlines"></div>
+
+    <!-- Entrance Screen -->
+    <div id="enter-overlay">
+        <div class="enter-text">click to enter</div>
+    </div>
+
+    <!-- Profile Interface Grid -->
+    <div id="main-card">
+        <div class="avatar-container">
+            <!-- Replace with your actual image asset or public asset path -->
+            <img src="https://avatars.githubusercontent.com/u/00000000?v=4" alt="Avatar" class="avatar">
+            <div class="verified-badge" title="Verified Account">
+                <i class="fas fa-check"></i>
+            </div>
+        </div>
+
+        <h1 class="username">gore-mods</h1>
+        
+        <div class="badge-row">
+            <span class="badge">Developer</span>
+            <span class="badge">GitHub</span>
+        </div>
+
+        <p class="description">
+            Curating next-gen gaming modifications, system level enhancements, and UI overhauls. Built different.
+        </p>
+
+        <!-- Dynamic Destination Links -->
+        <div class="links-container">
+            <a href="https://github.com/gore-mods" target="_blank" class="link-item">
+                <span><i class="fab fa-github"></i> GitHub Repositories</span>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            <a href="https://discord.gg/" target="_blank" class="link-item">
+                <span><i class="fab fa-discord"></i> Community Server</span>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            <a href="https://youtube.com/" target="_blank" class="link-item">
+                <span><i class="fab fa-youtube"></i> Showcases</span>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+
+        <!-- Embedded Audio Framework -->
+        <div class="audio-player">
+            <div class="track-info">
+                <i class="fas fa-compact-disc" id="disc-icon"></i>
+                <div>
+                    <span class="track-name">Phonetic Structure</span>
+                    <span class="track-artist">Underground Underground</span>
+                </div>
+            </div>
+            <div class="audio-controls">
+                <button id="play-btn"><i class="fas fa-play"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Audio Resource -->
+    <!-- Swap the src with your own direct URL (.mp3) link -->
+    <audio id="bg-audio" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
+    <script>
+        // DOM Element Cache
+        const overlay = document.getElementById('enter-overlay');
+        const card = document.getElementById('main-card');
+        const audio = document.getElementById('bg-audio');
+        const playBtn = document.getElementById('play-btn');
+        const discIcon = document.getElementById('disc-icon');
+        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursor-dot');
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+
+        // Render Canvas Dimensions
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Matrix/Particle Background Simulation
+        const particles = [];
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.speedY = Math.random() * 0.8 + 0.2;
+                this.opacity = Math.random() * 0.5 + 0.1;
+            }
+            update() {
+                this.y -= this.speedY;
+                if (this.y < 0) {
+                    this.y = canvas.height;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 51, 51, ${this.opacity})`;
+                ctx.fillRect(this.x, this.y, this.size, this.size);
+            }
+        }
+
+        for (let i = 0; i < 60; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Custom Adaptive Cursor Engine
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+        });
+
+        const interactiveElements = document.querySelectorAll('a, button, #enter-overlay');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.width = '35px';
+                cursor.style.height = '35px';
+                cursor.style.backgroundColor = 'rgba(255, 51, 51, 0.1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.style.width = '20px';
+                cursor.style.height = '20px';
+                cursor.style.backgroundColor = 'transparent';
+            });
+        });
+
+        // Activation / Gate Entry Actions
+        overlay.addEventListener('click', () => {
+            overlay.classList.add('fade-out');
+            card.classList.add('reveal');
+            
+            // Execute Audio Handshake
+            audio.play().catch(error => console.log("Audio autoplay prevented. Interaction required."));
+            playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            discIcon.style.animationPlayState = 'running';
+        });
+
+        // Integrated Audio Controls
+        playBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                discIcon.style.animationPlayState = 'running';
+            } else {
+                audio.pause();
+                playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                discIcon.style.animationPlayState = 'paused';
+            }
+        });
+    </script>
+</body>
+</html>
